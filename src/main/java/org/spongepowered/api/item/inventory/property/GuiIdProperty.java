@@ -31,7 +31,7 @@ import org.spongepowered.api.item.inventory.InventoryProperty;
  * A property to define which GUI should be opened on the client
  * for the inventory.
  */
-public interface GuiIdProperty extends InventoryProperty<String, GuiId> {
+public interface GuiIdProperty extends InventoryProperty<String, ContainerType> {
 
     /**
      * Creates a GuiIdProperty.
@@ -39,7 +39,7 @@ public interface GuiIdProperty extends InventoryProperty<String, GuiId> {
      * @param value The GuiId
      * @return The created GuiIdProperty
      */
-    static GuiIdProperty of(GuiId value) {
+    static GuiIdProperty of(ContainerType value) {
         return builder().value(value).operator(Operator.EQUAL).build();
     }
 
@@ -55,7 +55,7 @@ public interface GuiIdProperty extends InventoryProperty<String, GuiId> {
     /**
      * Represents a builder class to create {@link GuiIdProperty}s.
      */
-    interface Builder extends InventoryProperty.Builder<GuiId, GuiIdProperty, Builder> {
+    interface Builder extends InventoryProperty.Builder<ContainerType, GuiIdProperty, Builder> {
 
     }
 

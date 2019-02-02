@@ -42,7 +42,7 @@ import org.spongepowered.api.util.annotation.CatalogedBy;
  * total size for the GuiId. e.g. You can open a 1x9 Grid Inventory as
  * a Dispenser (3x3). But a 2x9 inventory will not work with it.</p>
  */
-@CatalogedBy(GuiIds.class)
-public interface GuiId extends CatalogType {
+@CatalogedBy(ContainerTypes.class)
+public interface ContainerType extends CatalogType {
 
 }
