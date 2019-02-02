@@ -28,7 +28,6 @@ import org.spongepowered.api.Nameable;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.Property;
 import org.spongepowered.api.data.property.PropertyHolder;
-import org.spongepowered.api.event.item.inventory.container.InteractContainerEvent;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperation;
@@ -40,7 +39,7 @@ import org.spongepowered.api.util.ResettableBuilder;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.UUID;
 
 /**
  * Base interface for queryable inventories.
@@ -498,13 +497,6 @@ public interface Inventory extends Nameable, PropertyHolder {
     PluginContainer getPlugin();
 
     /**
-     * Creates an {@link InventoryArchetype} based on this {@link Inventory}.
-     *
-     * @return The inventory archetype
-     */
-    InventoryArchetype getArchetype();
-
-    /**
      * Intersects the slots of both inventories.
      * The resulting inventory will only contain slots
      * that are present in both inventories.
@@ -570,78 +562,26 @@ public interface Inventory extends Nameable, PropertyHolder {
     Optional<ViewableInventory> asViewable();
 
     /**
-     * A Builder for Inventories based on {@link InventoryArchetype}s.
+     * A builder for free-form Inventories.
      */
     interface Builder extends ResettableBuilder<Inventory, Builder> {
 
-        /**
-         * Sets the base {@link InventoryArchetype} for the Inventory.
-         *
-         * @param archetype The InventoryArchetype
-         * @return Fluent pattern
-         */
-        Builder of(InventoryArchetype archetype);
+        // adds n indexed slots
+        StepBuilding slots(int n);
+        // adds a grid of x*y slots
+        StepBuilding grid(int x, int y);
+        // adds an inventory
+        StepBuilding inventory(Inventory inventory);
 
-        /**
-         * Sets an {@link InventoryProperty}.
-         *
-         * @param name The name
-         * @param property The property
-         * @return Fluent pattern
-         */
-        // TODO only properties declared in the archetype are allowed? IllegalArgumentException?
-        Builder property(String name, InventoryProperty<?, ?> property);
+        interface StepBuilding extends Builder {
+            StepEnd completeStructure();
+        }
 
-        /**
-         * Sets an {@link InventoryProperty} with its default key.
-         *
-         * @param property The property
-         * @return Fluent pattern
-         */
-        Builder property(InventoryProperty<?, ?> property);
-
-        /**
-         * Sets the {@link Carrier} that carries the Inventory.
-         *
-         * @param carrier The Carrier
-         * @return Fluent pattern
-         */
-        Builder withCarrier(Carrier carrier);
-
-        /**
-         * Registers a listener for given Event type
-         *
-         * @param type The type
-         * @param listener The listener
-         * @return Fluent pattern
-         */
-        <E extends InteractContainerEvent> Builder listener(Class<E> type, Consumer<E> listener);
-
-        /**
-         * Sets the InventoryArchetype and Properties according to the
-         * {@link Carrier}s Inventory.
-         *
-         * @param carrier The Carrier
-         * @return Fluent pattern
-         */
-        Builder forCarrier(Carrier carrier);
-
-        /**
-         * Sets the InventoryArchetype and Properties for a default Inventory of
-         * given {@link Carrier}.
-         *
-         * @param carrier The Carrier class
-         * @return Fluent pattern
-         */
-        Builder forCarrier(Class<? extends Carrier> carrier);
-
-        /**
-         * Builds the {@link Inventory}.
-         *
-         * @param plugin The plugin building this inventory
-         * @return The new Inventory instance
-         */
-        Inventory build(Object plugin);
-
+        interface StepEnd {
+            StepEnd identity(UUID uuid);
+            StepEnd carrier(Carrier carrier);
+            Inventory build();
+        }
     }
+
 }
