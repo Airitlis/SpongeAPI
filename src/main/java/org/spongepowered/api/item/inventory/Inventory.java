@@ -569,8 +569,6 @@ public interface Inventory extends Nameable, PropertyHolder {
      */
     Optional<ViewableInventory> asViewable();
 
-    ViewableInventory asViewable(InventoryTransformation.Viewable transformation);
-
     /**
      * A Builder for Inventories based on {@link InventoryArchetype}s.
      */
