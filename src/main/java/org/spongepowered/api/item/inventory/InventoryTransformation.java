@@ -42,13 +42,6 @@ import org.spongepowered.api.util.ResettableBuilder;
  */
 public interface InventoryTransformation {
 
-    interface Viewable extends InventoryTransformation {
-        InventoryArchetype type();
-
-        @Override
-        ViewableInventory transform(Inventory inventory);
-    }
-
     /**
      * Transforms an Inventory
      *
@@ -95,8 +88,6 @@ public interface InventoryTransformation {
          * @return The built transformation
          */
         InventoryTransformation build();
+
     }
-
-
-
 }
